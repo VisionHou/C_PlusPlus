@@ -79,7 +79,7 @@ namespace vc
 			return _node != it._node;
 		}
 
-		//жиди==
+		//жиди==(!=ХаЖЈ)
 		bool operator==(const Self& it)
 		{
 			return _node != it._node;
