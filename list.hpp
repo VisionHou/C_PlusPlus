@@ -82,7 +82,7 @@ namespace vc
 		//жиди==
 		bool operator==(const Self& it)
 		{
-			return _node == it._node;
+			return _node != it._node;
 		}
 	};
 
