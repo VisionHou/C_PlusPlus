@@ -176,12 +176,77 @@ void TestMultimap()
 	}
 }
 
+
+void TestCount()
+{
+#if 0
+	//1.传统方法:find+insert统计次数
+	std::string Str_Arr[] = { "i","love","i","i","love","monday" };
+	std::map<std::string, int> count_map;
+	std::map<std::string, int>::iterator it;
+
+	for (auto& e : Str_Arr)
+	{
+		it = count_map.find(e);
+		if (it != count_map.end())
+		{
+			//找到
+			it->second++;
+		}
+		else
+		{
+			//第一次出现
+			count_map.insert(std::make_pair(e, 1));
+		}
+	}
+#endif
+
+#if 0
+	//2.insert返回值pair<iterator,bool>
+	std::string Str_Arr[] = { "i","love","i","i","love","monday" };
+	typedef std::map<std::string, int> Count_Map;
+	typedef std::map<std::string, int>::iterator CountMap_it;
+
+	Count_Map count_map;
+	CountMap_it it;
+
+	for (auto& e : Str_Arr)
+	{
+		//auto ret = count_map.insert(std::make_pair(e, 1));
+		std::pair<std::map<std::string, int>::iterator, bool> ret = count_map.insert(std::make_pair(e, 1));
+		if (ret.second == false)
+		{
+			ret.first->second++;
+		}
+	}
+
+#endif
+
+
+	//3.operator[]统计次数,operator[]返回值是value的引用
+	//mapped_type& operator[] (const key_type& k);
+	//(*((this->insert(make_pair(k,mapped_type()))).first)).second 
+	std::string Str_Arr[] = { "i","love","i","i","love","monday" };
+	typedef std::map<std::string, int> Count_Map;
+	typedef std::map<std::string, int>::iterator CountMap_it;
+
+	Count_Map count_map;
+	CountMap_it it;
+	for (auto& e : Str_Arr)
+	{
+		count_map[e]++;
+	}
+
+}
+
 int main()
 {
 	//TestSet();//排序加去重
 	//TestMultiset();//排序
 	//TestMap();//k-v
-	TestMultimap();
+	TestCount();//统计单词次数
+
+	//TestMultimap();
 	system("pause");
 	return 0;
 }
