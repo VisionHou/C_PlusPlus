@@ -215,6 +215,7 @@ int main()
 
 #endif
 
+#if 0
 //实现shared_ptr
 template<class T>
 class Shared_Ptr
@@ -338,5 +339,65 @@ int main()
 	*s3 = 20;
 	system("pause");
 
+	return 0;
+}
+#endif
+
+#if 0
+//循环引用
+struct ListNode
+{
+	shared_ptr<ListNode> _prev;
+	shared_ptr<ListNode> _next;
+
+	~ListNode()
+	{
+		cout << "~ListNode" << endl;
+	}
+};
+
+int main()
+{
+	shared_ptr<ListNode> s1(new ListNode);
+	shared_ptr<ListNode> s2(new ListNode);
+	cout << "s1 " << s1.use_count() << endl;
+	cout << "s2 " << s2.use_count() << endl;//1
+
+	s1->_next = s2;
+	s2->_prev = s1;
+	cout << "s1 " << s1.use_count() << endl;
+	cout << "s2 " << s2.use_count() << endl;//2
+	//出了main后 s1s2析构，但是s1->next和s2->prev还存在，这样谁都不会释放
+
+	system("pause");
+	return 0;
+}
+#endif
+
+//weak_ptr解决
+struct ListNode
+{
+	weak_ptr<ListNode> _prev;
+	weak_ptr<ListNode> _next;
+
+	~ListNode()
+	{
+		cout << "~ListNode" << endl;
+	}
+};
+
+int main()
+{
+	shared_ptr<ListNode> s1(new ListNode);
+	shared_ptr<ListNode> s2(new ListNode);
+	cout << "s1 " << s1.use_count() << endl;
+	cout << "s2 " << s2.use_count() << endl;//1
+
+	s1->_next = s2;
+	s2->_prev = s1;
+	cout << "s1 " << s1.use_count() << endl;//1
+	cout << "s2 " << s2.use_count() << endl;//1
+
+	system("pause");
 	return 0;
 }
